@@ -7,12 +7,13 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\VonageMessage;
 
-class WelcomeSmsNotification extends Notification implements ShouldQueue
+class OtpSmsNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
     public function __construct(
-        public int $smsLogId
+        public int $smsLogId,
+        public string $otp
     ) {
     }
 
@@ -25,7 +26,8 @@ class WelcomeSmsNotification extends Notification implements ShouldQueue
     {
         return (new VonageMessage)
             ->content(
-                "Hello {$notifiable->name}, Welcome to our Laravel 12 App 🚀"
+                "Your Laravel App verification OTP is {$this->otp}. "
+                . "It will expire in 10 minutes."
             );
     }
 }

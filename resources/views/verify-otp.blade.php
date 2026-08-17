@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Register</title>
+    <title>Verify Phone</title>
 
     <style>
         body {
@@ -20,6 +20,7 @@
         button {
             padding: 10px 20px;
             cursor: pointer;
+            margin-right: 10px;
         }
 
         .error {
@@ -36,7 +37,17 @@
 
 <body>
 
-<h2>Create Account</h2>
+<h2>Verify Your Phone Number</h2>
+
+<p>
+    We have sent a 6-digit OTP to:
+</p>
+
+<strong>
+    {{ $user->phone }}
+</strong>
+
+<br><br>
 
 @if(session('success'))
     <div class="success">
@@ -54,49 +65,33 @@
     </div>
 @endif
 
-<form method="POST" action="{{ route('register.store') }}">
+<form method="POST" action="{{ route('otp.verify', $user) }}">
 
     @csrf
 
     <input
         type="text"
-        name="name"
-        placeholder="Name"
-        value="{{ old('name') }}"
-        required
-    >
-
-    <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        value="{{ old('email') }}"
-        required
-    >
-
-    <input
-        type="text"
-        name="phone"
-        placeholder="Phone with country code"
-        value="{{ old('phone') }}"
-        required
-    >
-
-    <small>
-        Example: 919876543210
-    </small>
-
-    <br><br>
-
-    <input
-        type="password"
-        name="password"
-        placeholder="Password"
+        name="otp"
+        placeholder="Enter 6-digit OTP"
+        maxlength="6"
+        inputmode="numeric"
         required
     >
 
     <button type="submit">
-        Register
+        Verify OTP
+    </button>
+
+</form>
+
+<br>
+
+<form method="POST" action="{{ route('otp.resend', $user) }}">
+
+    @csrf
+
+    <button type="submit">
+        Resend OTP
     </button>
 
 </form>

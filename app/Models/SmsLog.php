@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SmsLog extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'user_id',
         'phone',
@@ -23,8 +21,18 @@ class SmsLog extends Model
         'sent_at' => 'datetime',
     ];
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getStatusBadgeAttribute(): string
+    {
+        return match ($this->status) {
+            'sent' => 'success',
+            'failed' => 'danger',
+            'pending' => 'warning',
+            default => 'secondary',
+        };
     }
 }

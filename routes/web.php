@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SmsLogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,7 @@ Route::get('/', [AuthController::class, 'showRegister'])
 
 Route::post('/register', [AuthController::class, 'register'])
     ->name('register.store');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -30,11 +32,24 @@ Route::post('/verify-otp/{user}', [AuthController::class, 'verifyOtp'])
 Route::post('/resend-otp/{user}', [AuthController::class, 'resendOtp'])
     ->name('otp.resend');
 
+
 /*
 |--------------------------------------------------------------------------
 | SMS Logs
 |--------------------------------------------------------------------------
 */
 
-Route::get('/sms-logs', [AuthController::class, 'smsLogs'])
-    ->name('sms.logs');
+Route::prefix('sms-logs')->name('sms.')->group(function () {
+
+    Route::get('/', [SmsLogController::class, 'index'])
+        ->name('index');
+
+    Route::get('/{smsLog}', [SmsLogController::class, 'show'])
+        ->name('show');
+
+    Route::post('/{smsLog}/retry', [SmsLogController::class, 'retry'])
+        ->name('retry');
+
+    Route::delete('/{smsLog}', [SmsLogController::class, 'destroy'])
+        ->name('destroy');
+});

@@ -17,16 +17,27 @@ return new class extends Migration
                 ->nullOnDelete();
 
             $table->string('phone');
-            $table->string('type');
+
+            $table->string('type')->default('notification');
+
             $table->text('message');
 
-            $table->string('status')->default('queued');
+            $table->enum('status', [
+                'pending',
+                'sent',
+                'failed'
+            ])->default('pending');
 
             $table->text('error_message')->nullable();
 
             $table->timestamp('sent_at')->nullable();
 
             $table->timestamps();
+
+            $table->index('phone');
+            $table->index('type');
+            $table->index('status');
+            $table->index('sent_at');
         });
     }
 
